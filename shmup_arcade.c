@@ -1,4 +1,3 @@
-// shmup_arcade.c
 // Shoot 'em up arcade (single-file, vector art, no music)
 // Compile (Windows MinGW): gcc shmup_arcade.c -o shmup_arcade.exe -std=c99 -O2 -lmingw32 -lSDL2main -lSDL2
 // Compile (Linux/macOS): gcc shmup_arcade.c -o shmup_arcade `sdl2-config --cflags --libs` -std=c99 -O2
@@ -525,4 +524,5 @@ cleanup:
     SDL_DestroyWindow(win);
     SDL_Quit();
     return 0;
+
 }
