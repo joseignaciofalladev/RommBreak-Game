@@ -516,7 +516,6 @@ int main(int argc, char** argv){
 
         // small score accumulation for survival
         if(!gameOver) score += 0; // we give points for kills already
-
     }
 
 cleanup:
@@ -524,5 +523,4 @@ cleanup:
     SDL_DestroyWindow(win);
     SDL_Quit();
     return 0;
-
 }
