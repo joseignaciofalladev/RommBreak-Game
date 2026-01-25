@@ -122,7 +122,7 @@ void spawnBoss(){
     bossX = W/2;
     bossY = -120;
     bossVX = 0;
-    bossHP = 300 + rand()%150; // HP variable
+    bossHP = 300 + rand()%150;
     bossPhase = 0;
     bossEntranceTimer = 0;
     bossShootTimer = 0;
@@ -523,4 +523,5 @@ cleanup:
     SDL_Quit();
     return 0;
 }
+
 
