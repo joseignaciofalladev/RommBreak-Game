@@ -1,5 +1,4 @@
 // Compile (Windows MinGW): gcc shmup_arcade.c -o shmup_arcade.exe -std=c99 -O2 -lmingw32 -lSDL2main -lSDL2
-// Compile (Linux/macOS): gcc shmup_arcade.c -o shmup_arcade `sdl2-config --cflags --libs` -std=c99 -O2
 
 #include <SDL2/SDL.h>
 #include <stdlib.h>
@@ -523,5 +522,6 @@ cleanup:
     SDL_Quit();
     return 0;
 }
+
 
 
