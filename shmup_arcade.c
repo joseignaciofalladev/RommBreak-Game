@@ -303,8 +303,7 @@ void updatePhysics(){
         for(int i=0;i<3;i++) spawnEnemy();
     }
 
-    // small cap on velocities, etc
-    // clean dead
+    // small cap on velocities, etc, clean dead
 }
 
 void renderVectorTriangle(SDL_Renderer* r, float cx, float cy, float size, float angle){
@@ -522,6 +521,7 @@ cleanup:
     SDL_Quit();
     return 0;
 }
+
 
 
 
