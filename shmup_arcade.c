@@ -297,15 +297,12 @@ void updatePhysics(){
     if(stageTimer % 20 == 0 && !bossAlive){
         if(rand()%8 < 5) spawnEnemy();
     }
-
     // simple difficulty ramp: occasionally spawn extra
     if(stageTimer % 600 == 0 && !bossAlive){
         for(int i=0;i<3;i++) spawnEnemy();
     }
-
     // small cap on velocities, etc, clean dead
 }
-
 void renderVectorTriangle(SDL_Renderer* r, float cx, float cy, float size, float angle){
     // 3-point ship triangle
     float a1 = angle;
@@ -321,13 +318,11 @@ void renderVectorTriangle(SDL_Renderer* r, float cx, float cy, float size, float
     SDL_RenderDrawLine(r,x2,y2,x3,y3);
     SDL_RenderDrawLine(r,x3,y3,x1,y1);
 }
-
 void draw(SDL_Renderer* r){
     // background gradient-ish (simple)
     Uint8 base = 8;
     SDL_SetRenderDrawColor(r, base, base, base+18, 255);
     SDL_RenderClear(r);
-
     // starfield: quick randomized stars based on score/time (not persistent)
     for(int i=0;i<80;i++){
         int sx = (i*37 + (score*3)) % W;
@@ -335,25 +330,21 @@ void draw(SDL_Renderer* r){
         SDL_SetRenderDrawColor(r, 20 + (i%3)*10, 20 + (i%5)*5, 40, 255);
         SDL_RenderDrawPoint(r, sx, sy);
     }
-
     // player - vector triangle with thrust effect
     SDL_SetRenderDrawColor(r, 120, 220, 200, 255);
     renderVectorTriangle(r, px, py, 12, -M_PI/2);
-
     // player hp bars
     for(int i=0;i<p_hp;i++){
         SDL_Rect hp = {10 + i*18, H-26, 14, 12};
         SDL_SetRenderDrawColor(r, 220, 80, 80, 255);
         SDL_RenderFillRect(r, &hp);
     }
-
     // bullets
     SDL_SetRenderDrawColor(r, 250, 250, 120, 255);
     for(int i=0;i<MAX_BULLETS;i++) if(bullets[i].alive){
         SDL_Rect b = {(int)bullets[i].x-2, (int)bullets[i].y-6, 4, 10};
         SDL_RenderFillRect(r, &b);
     }
-
     // enemies - vector squares/diamonds
     for(int i=0;i<MAX_ENEMIES;i++) if(enemies[i].alive){
         int ex = (int)enemies[i].x;
@@ -365,13 +356,11 @@ void draw(SDL_Renderer* r){
         SDL_RenderDrawLine(r, ex, ey+8, ex-8, ey);
         SDL_RenderDrawLine(r, ex-8, ey, ex, ey-8);
     }
-
     // particles
     for(int i=0;i<MAX_PARTICLES;i++) if(particles[i].alive){
         SDL_SetRenderDrawColor(r, 255, 200, 120, 255);
         SDL_RenderDrawPoint(r, (int)particles[i].x, (int)particles[i].y);
     }
-
     // boss
     if(bossAlive){
         // boss body - layered vector shapes
@@ -399,14 +388,12 @@ void draw(SDL_Renderer* r){
             SDL_RenderFillRect(r, &bar);
         }
     }
-
     // boss bullets
     SDL_SetRenderDrawColor(r, 255, 140, 120, 255);
     for(int i=0;i<MAX_BOSS_BULLETS;i++) if(bossBullets[i].alive){
         SDL_Rect bb = {(int)bossBullets[i].x-3, (int)bossBullets[i].y-3, 6, 6};
         SDL_RenderFillRect(r, &bb);
     }
-
     // HUD: score and lives
     char buf[64];
     snprintf(buf,64,"Score: %d", score);
@@ -424,7 +411,6 @@ void draw(SDL_Renderer* r){
         int ly = 12;
         renderVectorTriangle(r, lx, ly, 6, -M_PI/2);
     }
-
     // Game Over overlay
     if(gameOver){
         SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
@@ -441,7 +427,6 @@ void draw(SDL_Renderer* r){
         }
         // simple prompt: user can press R to restart
     }
-
     SDL_RenderPresent(r);
 }
 
@@ -456,9 +441,7 @@ int main(int argc, char** argv){
     if(!win){ printf("Window error: %s\n", SDL_GetError()); SDL_Quit(); return 1; }
     SDL_Renderer* rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(!rend){ printf("Renderer error: %s\n", SDL_GetError()); SDL_DestroyWindow(win); SDL_Quit(); return 1; }
-
     resetLevel();
-
     Uint32 lastTick = SDL_GetTicks();
     int shootHeld = 0;
     while(1){
@@ -481,7 +464,6 @@ int main(int argc, char** argv){
             if(ks[SDL_SCANCODE_DOWN] || ks[SDL_SCANCODE_S]) py += 4.0f;
             px = clamp(px, 16, W-16);
             py = clamp(py, 60, H-20);
-
             // shooting
             if(ks[SDL_SCANCODE_SPACE]){
                 if(!shootHeld && fireCooldown <= 0){
@@ -493,24 +475,19 @@ int main(int argc, char** argv){
                 }
                 shootHeld = 1;
             } else shootHeld = 0;
-
             if(fireCooldown>0) fireCooldown--;
-
             // Update physics and enemies
             updatePhysics();
         } else {
             // gameOver state — wait for R or ESC handled earlier
         }
-
         // draw
         draw(rend);
-
         // frame delay basic
         Uint32 now = SDL_GetTicks();
         Uint32 frameTime = now - lastTick;
         if(frameTime < 16) SDL_Delay(16 - frameTime);
         lastTick = SDL_GetTicks();
-
         // small score accumulation for survival
         if(!gameOver) score += 0; // we give points for kills already
     }
@@ -521,7 +498,3 @@ cleanup:
     SDL_Quit();
     return 0;
 }
-
-
-
-
