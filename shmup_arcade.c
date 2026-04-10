@@ -1,26 +1,20 @@
 // Compile (Windows MinGW): gcc shmup_arcade.c -o shmup_arcade.exe -std=c99 -O2 -lmingw32 -lSDL2main -lSDL2
-
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
 #include <stdio.h>
-
 #define W 800
 #define H 600
-
 #define MAX_BULLETS 128
 #define MAX_ENEMIES 64
 #define MAX_PARTICLES 200
 #define MAX_BOSS_BULLETS 256
-
 typedef struct { float x,y,vx,vy; int alive; } Obj;
-
 static Obj bullets[MAX_BULLETS];
 static Obj enemies[MAX_ENEMIES];
 static Obj particles[MAX_PARTICLES];
 static Obj bossBullets[MAX_BOSS_BULLETS];
-
 static float px, py;
 static int p_hp = 3;
 static int score = 0;
@@ -29,19 +23,16 @@ static int fireCooldown = 0;
 static int enemySpawnTimer = 0;
 static int gameOver = 0;
 static int stageTimer = 0;
-
 // Boss
 static int bossAlive = 0;
 static float bossX=0, bossY=0, bossVX=0, bossHP=0;
 static int bossPhase = 0;
 static int bossShootTimer = 0;
 static int bossEntranceTimer = 0;
-
 // Utility
 static float clamp(float v, float a, float b){ if(v<a) return a; if(v>b) return b; return v; }
 static float rndf(){ return (rand()/(float)RAND_MAX); }
 static float dist2(float x1,float y1,float x2,float y2){ float dx=x1-x2, dy=y1-y2; return dx*dx+dy*dy; }
-
 void spawnParticle(float x, float y, int n){
     for(int i=0;i<MAX_PARTICLES && n>0;i++){
         if(!particles[i].alive){
@@ -56,7 +47,6 @@ void spawnParticle(float x, float y, int n){
         }
     }
 }
-
 void spawnEnemy(){
     for(int i=0;i<MAX_ENEMIES;i++){
         if(!enemies[i].alive){
@@ -69,7 +59,6 @@ void spawnEnemy(){
         }
     }
 }
-
 void fireBullet(float x,float y,float vx,float vy){
     for(int i=0;i<MAX_BULLETS;i++){
         if(!bullets[i].alive){
@@ -82,7 +71,6 @@ void fireBullet(float x,float y,float vx,float vy){
         }
     }
 }
-
 void fireBossBullet(float x,float y,float vx,float vy){
     for(int i=0;i<MAX_BOSS_BULLETS;i++){
         if(!bossBullets[i].alive){
@@ -95,7 +83,6 @@ void fireBossBullet(float x,float y,float vx,float vy){
         }
     }
 }
-
 void resetLevel(){
     for(int i=0;i<MAX_BULLETS;i++) bullets[i].alive=0;
     for(int i=0;i<MAX_ENEMIES;i++) enemies[i].alive=0;
@@ -115,7 +102,6 @@ void resetLevel(){
     lives = 3;
     gameOver = 0;
 }
-
 void spawnBoss(){
     bossAlive = 1;
     bossX = W/2;
@@ -126,7 +112,6 @@ void spawnBoss(){
     bossEntranceTimer = 0;
     bossShootTimer = 0;
 }
-
 void updatePhysics(){
     // player input handled externally
     // bullets
@@ -198,12 +183,10 @@ void updatePhysics(){
             bossVX = clamp(bossVX, -3, 3);
             if(bossX < 60) bossX = 60, bossVX = -bossVX;
             if(bossX > W-60) bossX = W-60, bossVX = -bossVX;
-
             // phases by HP proportion
             float prop = bossHP / 400.0f;
             if(prop < 0.6f) bossPhase = 1;
             if(prop < 0.35f) bossPhase = 2;
-
             // shooting patterns
             bossShootTimer++;
             if(bossPhase==0){
@@ -246,7 +229,6 @@ void updatePhysics(){
             }
         }
     }
-
     // boss bullets
     for(int i=0;i<MAX_BOSS_BULLETS;i++){
         if(bossBullets[i].alive){
@@ -271,7 +253,6 @@ void updatePhysics(){
             }
         }
     }
-
     // collision bullets -> boss
     if(bossAlive && bossEntranceTimer >= 120){
         for(int i=0;i<MAX_BULLETS;i++) if(bullets[i].alive){
@@ -287,7 +268,6 @@ void updatePhysics(){
             }
         }
     }
-
     // spawn enemies over time
     enemySpawnTimer++;
     stageTimer++;
